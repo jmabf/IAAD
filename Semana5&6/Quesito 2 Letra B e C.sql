@@ -31,19 +31,23 @@ where lp.id_linguagem = pl.id_linguagem and p.id_programador = pl.id_programador
 -- Observação: se o programador não estiver associado a nenhuma das linguagens de programação cadastradas
 -- no BD_Startup, no resultado da consulta deve constar null no nome da linguagem de programação.
 
--- ERRADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 use bd_startup;
 select p.nome_programador, lp.linguagem from programador as p 
-right join programador_linguagem as pl
+left join programador_linguagem as pl
 on p.id_programador = pl.id_programador
-inner join linguagem_programacao as lp 
+left join linguagem_programacao as lp 
 on lp.id_linguagem = pl.id_linguagem;
 
 -- IV. Listar os nomes dos programadores que não programam nas linguagens cadastradas
 -- no BD_Startup (observação: esses programadores programam outras LP, por exemplo C++, Ruby, Scala etc.)
 use bd_startup;
-select p.nome_programador from programador as p join programador_linguagem as pl
-where p.id_programador = pl.id_programador and pl.id_linguagem = null;
+select p.nome_programador from programador as p 
+left join programador_linguagem as pl
+on p.id_programador = pl.id_programador
+left join linguagem_programacao as lp 
+on lp.id_linguagem = pl.id_linguagem
+where lp.linguagem is null;
+
 
 -- V. Listar os nomes de todas as startups e seus programadores
 -- independentemente se a startup tem ou não programadores
